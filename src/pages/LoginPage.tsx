@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useInput } from '@/hooks/useInput'
+import { emailValidator, passwordValidator } from '@/utils/validator'
 
 const Wrapper = styled.section`
   display: flex;
@@ -62,18 +63,6 @@ const ErrorMsg = styled.div`
   max-width: 320px;
   width: 100%;
 `
-const emailValidator = (value: string): string => {
-  if (!value.trim()) return 'ID를 입력해주세요.'
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!emailRegex.test(value)) return 'ID는 이메일 형식으로 입력해주세요.'
-  return ''
-}
-
-const passwordValidator = (value: string): string => {
-  if (!value.trim()) return 'PW를 입력해주세요.'
-  if (value.length < 8) return 'PW는 최소 8글자 이상이어야 합니다.'
-  return ''
-}
 
 const LoginPage = () => {
   const navigate = useNavigate()
