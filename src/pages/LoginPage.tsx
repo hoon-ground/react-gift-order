@@ -62,6 +62,7 @@ const ErrorMsg = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.spacing3};
   max-width: 320px;
   width: 100%;
+  min-height: 18px;
 `
 
 const LoginPage = () => {
@@ -92,7 +93,9 @@ const LoginPage = () => {
         onChange={emailInput.onChange}
         onBlur={emailInput.onBlur}
       />
-      {emailInput.error && <ErrorMsg>{emailInput.error}</ErrorMsg>}
+      <ErrorMsg style={{ visibility: emailInput.error ? 'visible' : 'hidden' }}>
+        {emailInput.error || '에러 자리'}
+      </ErrorMsg>
 
       <Input
         name="password"
@@ -101,7 +104,9 @@ const LoginPage = () => {
         onChange={passwordInput.onChange}
         onBlur={passwordInput.onBlur}
       />
-      {passwordInput.error && <ErrorMsg>{passwordInput.error}</ErrorMsg>}
+      <ErrorMsg style={{ visibility: passwordInput.error ? 'visible' : 'hidden' }}>
+        {passwordInput.error || '에러 자리'}
+      </ErrorMsg>
       <Button onClick={handleLogin} disabled={!isFormValid}>로그인</Button>
     </Wrapper>
   )
