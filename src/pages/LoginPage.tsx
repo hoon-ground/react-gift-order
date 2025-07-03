@@ -29,7 +29,6 @@ const Input = styled.input`
   margin-bottom: ${({ theme }) => theme.spacing.spacing4};
   font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-  background: transparent;
   background-color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
   caret-color: ${({ theme }) => theme.colors.semantic.textDefault};
   outline: none;
