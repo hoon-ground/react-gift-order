@@ -1,6 +1,7 @@
 import styled from '@emotion/styled'
 import { FaChevronLeft, FaUser } from 'react-icons/fa'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useUser } from '@/contexts/UserContext'
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -39,6 +40,7 @@ const IconButton = styled.button<{ disabled?: boolean }>`
 const Header = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const { user } = useUser()
 
   const isLoginPage = location.pathname === '/login'
 
@@ -46,8 +48,12 @@ const Header = () => {
     navigate(-1)
   }
 
-  const handleGoLogin = () => {
-    if (!isLoginPage) navigate('/login')
+  const handleGoLoginOrMyPage = () => {
+    if (user) {
+      navigate('/my')
+    } else if (!isLoginPage) {
+      navigate('/login')
+    }
   }
 
   return (
@@ -56,7 +62,7 @@ const Header = () => {
         <FaChevronLeft />
       </IconButton>
       <Title>선물하기</Title>
-      <IconButton onClick={handleGoLogin} disabled={isLoginPage}>
+      <IconButton onClick={handleGoLoginOrMyPage} disabled={isLoginPage}>
         <FaUser />
       </IconButton>
     </HeaderWrapper>

@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useInput } from '@/hooks/useInput'
 import { emailValidator, passwordValidator } from '@/utils/validator'
+import { useUser } from '@/contexts/UserContext'
 
 const Wrapper = styled.section`
   display: flex;
@@ -71,9 +72,11 @@ const LoginPage = () => {
   const emailInput = useInput('', emailValidator)
   const passwordInput = useInput('', passwordValidator)
   const isFormValid = emailInput.isValid && passwordInput.isValid
+  const { login } = useUser()
 
   const handleLogin = () => {
     if (isFormValid) {
+      login({ email: emailInput.value })
       if (location.key !== 'default') {
         navigate(-1)
       } else {
