@@ -104,14 +104,14 @@ const OrderPage = () => {
   const quantityInput = useInput('1', quantityValidator)
 
   const navigate = useNavigate()
-  const { user } = useUser()
+  const { user, isLoading } = useUser()
   const location = useLocation()
 
   useEffect(() => {
-    if (!user) {
+    if (!isLoading && !user) {
       navigate('/login', { state: { from: location }, replace: true })
     }
-  }, [user])
+  }, [user, isLoading])
 
   if (!product) return <div>상품을 찾을 수 없습니다.</div>
 

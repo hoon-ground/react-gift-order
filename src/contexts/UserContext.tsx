@@ -8,18 +8,21 @@ interface UserContextType {
   user: User | null
   login: (user: User) => void
   logout: () => void
+  isLoading: boolean
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user')
     if (storedUser) {
       setUser(JSON.parse(storedUser))
     }
+    setIsLoading(false)
   }, [])
 
   const login = (user: User) => {
@@ -33,8 +36,8 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, login, logout }}>
-      {children}
+    <UserContext.Provider value={{ user, login, logout, isLoading }}>
+      {!isLoading && children}
     </UserContext.Provider>
   )
 }
