@@ -77,11 +77,9 @@ const LoginPage = () => {
   const handleLogin = () => {
     if (isFormValid) {
       login({ email: emailInput.value })
-      if (location.key !== 'default') {
-        navigate(-1)
-      } else {
-        navigate('/')
-      }
+      
+      const from = location.state?.from?.pathname || '/'
+      navigate(from, { replace: true })
     }
   }
 

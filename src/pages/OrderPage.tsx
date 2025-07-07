@@ -1,11 +1,12 @@
 import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { productMockData } from '@/mocks/products'
 import { messageCardMockData } from '@/mocks/messageCards'
 import { useInput } from '@/hooks/useInput'
 import { messageRequiredValidator, nameRequiredValidator, phoneValidator, quantityValidator } from '@/utils/validator'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useUser } from '@/contexts/UserContext'
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -47,6 +48,11 @@ const Textarea = styled.textarea`
 
 const Section = styled.section`
   margin-bottom: ${({ theme }) => theme.spacing.spacing5};
+`
+const FieldInputWrapper = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 `
 
 const Label = styled.label`
@@ -145,7 +151,15 @@ const OrderPage = () => {
     const quantityInput = useInput('1', quantityValidator)
 
     const navigate = useNavigate()
-    
+    const { user } = useUser()
+    const location = useLocation()
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/login', { state: { from: location }, replace: true })
+        }
+    }, [user])
+
     if (!product) return <div>상품을 찾을 수 없습니다.</div>
 
     const handleSubmit = () => {
@@ -160,7 +174,8 @@ const OrderPage = () => {
             senderInput.isValid &&
             receiverNameInput.isValid &&
             receiverPhoneInput.isValid &&
-            quantityInput.isValid
+            quantityInput.isValid &&
+            product
         ) {
             alert(
                 `주문이 완료되었습니다.\n` +
@@ -217,35 +232,41 @@ const OrderPage = () => {
                 <Label>받는 사람</Label>
                 <FieldRow>
                     <FieldLabel>이름</FieldLabel>
-                    <Input
-                        value={receiverNameInput.value}
-                        onChange={receiverNameInput.onChange}
-                        onBlur={receiverNameInput.onBlur}
-                        placeholder="이름을 입력하세요."
-                    />
-                    {receiverNameInput.error && <ErrorMsg>{receiverNameInput.error}</ErrorMsg>}
+                    <FieldInputWrapper>
+                        <Input
+                            value={receiverNameInput.value}
+                            onChange={receiverNameInput.onChange}
+                            onBlur={receiverNameInput.onBlur}
+                            placeholder="이름을 입력하세요."
+                        />
+                        {receiverNameInput.error && <ErrorMsg>{receiverNameInput.error}</ErrorMsg>}
+                    </FieldInputWrapper>
                 </FieldRow>
                 <FieldRow>
                     <FieldLabel>전화번호</FieldLabel>
-                    <Input
-                        value={receiverPhoneInput.value}
-                        onChange={receiverPhoneInput.onChange}
-                        onBlur={receiverPhoneInput.onBlur}
-                        placeholder="전화번호를 입력하세요."
-                    />
-                    {receiverPhoneInput.error && <ErrorMsg>{receiverPhoneInput.error}</ErrorMsg>}
+                    <FieldInputWrapper>
+                        <Input
+                            value={receiverPhoneInput.value}
+                            onChange={receiverPhoneInput.onChange}
+                            onBlur={receiverPhoneInput.onBlur}
+                            placeholder="전화번호를 입력하세요."
+                        />
+                        {receiverPhoneInput.error && <ErrorMsg>{receiverPhoneInput.error}</ErrorMsg>}
+                    </FieldInputWrapper>
                 </FieldRow>
                 <FieldRow>
                     <FieldLabel>수량</FieldLabel>
-                    <Input
-                        type="number"
-                        value={quantityInput.value}
-                        onChange={quantityInput.onChange}
-                        onBlur={quantityInput.onBlur}
-                        placeholder="수량"
-                        min={1}
-                    />
-                    {quantityInput.error && <ErrorMsg>{quantityInput.error}</ErrorMsg>}
+                    <FieldInputWrapper>
+                        <Input
+                            type="number"
+                            value={quantityInput.value}
+                            onChange={quantityInput.onChange}
+                            onBlur={quantityInput.onBlur}
+                            placeholder="수량"
+                            min={1}
+                        />
+                        {quantityInput.error && <ErrorMsg>{quantityInput.error}</ErrorMsg>}
+                    </FieldInputWrapper>
                 </FieldRow>
             </Section>
 
