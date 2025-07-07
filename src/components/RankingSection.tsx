@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { useState } from 'react'
 import { productMockData } from '@/mocks/products'
 import { useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const genderTabs = ['전체', '여성이', '남성이', '청소년이'] as const
 type GenderType = typeof genderTabs[number]
@@ -132,6 +133,7 @@ const RankingSection = () => {
   const selectedGender = searchParams.get('gender') || '전체'
   const selectedRank = searchParams.get('rank') || '많이 선물한'
   const [isExpanded, setIsExpanded] = useState(false)
+  const navigate = useNavigate()
 
   const handleToggle = () => {
     setIsExpanded((prev) => !prev)
@@ -164,7 +166,7 @@ const RankingSection = () => {
       <Title>실시간 급상승 선물랭킹</Title>
 
       <UserGroupTab>
-        {genderTabs.map((tab : GenderType) => (
+        {genderTabs.map((tab: GenderType) => (
           <UserTab
             key={tab}
             isSelected={selectedGender === tab}
@@ -190,7 +192,7 @@ const RankingSection = () => {
 
       <ProductGrid>
         {productList.slice(0, visibleCount).map((item, idx) => (
-          <ProductCard key={item.id}>
+          <ProductCard key={item.id} onClick={() => navigate(`/order/${item.id}`)}>
             <Badge isTop3={idx < 3}>{idx + 1}</Badge>
             <img src={item.imageURL} alt={item.name} />
             <Brand>{item.brandInfo.name}</Brand>

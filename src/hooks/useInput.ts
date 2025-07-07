@@ -8,10 +8,13 @@ export const useInput = (
   const [error, setError] = useState('')
   const [touched, setTouched] = useState(false)
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setValue(e.target.value)
     if (touched) setError(validate(e.target.value))
   }
+
 
   const onBlur = () => {
     setTouched(true)
