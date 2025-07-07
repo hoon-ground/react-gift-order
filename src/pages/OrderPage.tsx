@@ -7,6 +7,7 @@ import { useInput } from '@/hooks/useInput'
 import { messageRequiredValidator, nameRequiredValidator, phoneValidator, quantityValidator } from '@/utils/validator'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useUser } from '@/contexts/UserContext'
+import ErrorMessage from '@/components/ErrorMessage'
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -129,15 +130,6 @@ const OrderButton = styled.button`
   margin-top: ${({ theme }) => theme.spacing.spacing5};
 `
 
-const ErrorMsg = styled.div`
-  color: ${({ theme }) => theme.colors.red.red500};
-  font-size: ${({ theme }) => theme.typography.label2Regular.fontSize};
-  margin-bottom: ${({ theme }) => theme.spacing.spacing3};
-  max-width: 320px;
-  width: 100%;
-  min-height: 18px;
-`
-
 const OrderPage = () => {
     const { productId } = useParams()
     const product = productMockData.find((p) => p.id === Number(productId))
@@ -213,7 +205,7 @@ const OrderPage = () => {
                 onBlur={messageInput.onBlur}
                 placeholder="축하 메시지를 입력하세요."
             />
-            {messageInput.error && <ErrorMsg>{messageInput.error}</ErrorMsg>}
+            <ErrorMessage message={messageInput.error} />
 
             <Section>
                 <Label>보내는 사람</Label>
@@ -224,7 +216,7 @@ const OrderPage = () => {
                     placeholder="이름을 입력하세요."
                 />
                 {senderInput.error
-                    ? <ErrorMsg>{senderInput.error}</ErrorMsg>
+                    ? <ErrorMessage message={senderInput.error} />
                     : <Note>* 실제 선물 발송 시 발신자 이름으로 반영되는 정보입니다.</Note>}
             </Section>
 
@@ -239,7 +231,7 @@ const OrderPage = () => {
                             onBlur={receiverNameInput.onBlur}
                             placeholder="이름을 입력하세요."
                         />
-                        {receiverNameInput.error && <ErrorMsg>{receiverNameInput.error}</ErrorMsg>}
+                        <ErrorMessage message={receiverNameInput.error} />
                     </FieldInputWrapper>
                 </FieldRow>
                 <FieldRow>
@@ -251,7 +243,7 @@ const OrderPage = () => {
                             onBlur={receiverPhoneInput.onBlur}
                             placeholder="전화번호를 입력하세요."
                         />
-                        {receiverPhoneInput.error && <ErrorMsg>{receiverPhoneInput.error}</ErrorMsg>}
+                        <ErrorMessage message={receiverPhoneInput.error} />
                     </FieldInputWrapper>
                 </FieldRow>
                 <FieldRow>
@@ -265,7 +257,7 @@ const OrderPage = () => {
                             placeholder="수량"
                             min={1}
                         />
-                        {quantityInput.error && <ErrorMsg>{quantityInput.error}</ErrorMsg>}
+                        <ErrorMessage message={quantityInput.error} />
                     </FieldInputWrapper>
                 </FieldRow>
             </Section>

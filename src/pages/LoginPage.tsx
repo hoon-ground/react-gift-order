@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useInput } from '@/hooks/useInput'
 import { emailValidator, passwordValidator } from '@/utils/validator'
 import { useUser } from '@/contexts/UserContext'
+import ErrorMessage from '@/components/ErrorMessage'
 
 const Wrapper = styled.section`
   display: flex;
@@ -57,15 +58,6 @@ const Button = styled.button`
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
 `
 
-const ErrorMsg = styled.div`
-  color: ${({ theme }) => theme.colors.red.red500};
-  font-size: ${({ theme }) => theme.typography.label2Regular.fontSize};
-  margin-bottom: ${({ theme }) => theme.spacing.spacing3};
-  max-width: 320px;
-  width: 100%;
-  min-height: 18px;
-`
-
 const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
@@ -77,7 +69,7 @@ const LoginPage = () => {
   const handleLogin = () => {
     if (isFormValid) {
       login({ email: emailInput.value })
-      
+
       const from = location.state?.from?.pathname || '/'
       navigate(from, { replace: true })
     }
@@ -94,9 +86,7 @@ const LoginPage = () => {
         onChange={emailInput.onChange}
         onBlur={emailInput.onBlur}
       />
-      <ErrorMsg style={{ visibility: emailInput.error ? 'visible' : 'hidden' }}>
-        {emailInput.error || '에러 자리'}
-      </ErrorMsg>
+      <ErrorMessage message={emailInput.error} />
 
       <Input
         name="password"
@@ -105,9 +95,7 @@ const LoginPage = () => {
         onChange={passwordInput.onChange}
         onBlur={passwordInput.onBlur}
       />
-      <ErrorMsg style={{ visibility: passwordInput.error ? 'visible' : 'hidden' }}>
-        {passwordInput.error || '에러 자리'}
-      </ErrorMsg>
+      <ErrorMessage message={passwordInput.error} />
       <Button onClick={handleLogin} disabled={!isFormValid}>로그인</Button>
     </Wrapper>
   )
