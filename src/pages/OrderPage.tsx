@@ -106,36 +106,25 @@ const OrderPage = () => {
   const receiverNameInput = useInput('', nameRequiredValidator);
   const receiverPhoneInput = useInput('', phoneValidator);
   const quantityInput = useInput('1', quantityValidator);
-
+  const forms = [messageInput, senderInput, receiverNameInput, receiverPhoneInput, quantityInput];
   const navigate = useNavigate();
 
   if (!product) return <div>상품을 찾을 수 없습니다.</div>;
 
   const handleSubmit = () => {
-    messageInput.onBlur();
-    senderInput.onBlur();
-    receiverNameInput.onBlur();
-    receiverPhoneInput.onBlur();
-    quantityInput.onBlur();
+    const allValid = forms.every((f) => f.validate());
 
-    if (
-      messageInput.isValid &&
-      senderInput.isValid &&
-      receiverNameInput.isValid &&
-      receiverPhoneInput.isValid &&
-      quantityInput.isValid &&
-      product
-    ) {
-      alert(
-        `주문이 완료되었습니다.\n` +
-          `상품명: ${product.name}\n` +
-          `구매 수량: ${quantityInput.value}\n` +
-          `발신자 이름: ${senderInput.value}\n` +
-          `메시지: ${messageInput.value}`
-      );
+    if (!allValid || !product) return;
 
-      navigate(ROUTE.MAIN);
-    }
+    alert(
+      `주문이 완료되었습니다.\n` +
+        `상품명: ${product.name}\n` +
+        `구매 수량: ${quantityInput.value}\n` +
+        `발신자 이름: ${senderInput.value}\n` +
+        `메시지: ${messageInput.value}`
+    );
+
+    navigate(ROUTE.MAIN);
   };
 
   return (
