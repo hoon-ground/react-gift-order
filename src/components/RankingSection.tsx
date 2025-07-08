@@ -1,15 +1,16 @@
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { productMockData } from '@/mocks/products';
-import { useSearchParams } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
+import { ROUTE } from '@/constants/routes';
+import { useUser } from '@/contexts/UserContext';
 
 const genderTabs = ['전체', '여성이', '남성이', '청소년이'] as const;
 type GenderType = (typeof genderTabs)[number];
 const rankTabs = ['받고 싶어한', '많이 선물한', '위시로 받은'];
 // TODO : 임시 하드코딩. 추후 개수 변경 가능
-const initCount = 6;
-const fullCount = 12;
+const INIT_COUNT = 6;
+const FULL_COUNT = 12;
 
 const SectionWrapper = styled.section`
   margin-top: ${({ theme }) => theme.spacing.spacing6};
@@ -86,6 +87,7 @@ const ProductCard = styled.div`
     width: 100%;
   }
   margin-bottom: ${({ theme }) => theme.spacing.spacing4};
+  cursor: pointer;
 `;
 
 const Badge = styled.div<{ isTop3: boolean }>`
@@ -138,6 +140,7 @@ const RankingSection = () => {
   const selectedRank = searchParams.get('rank') || '많이 선물한';
   const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
+  const { user } = useUser();
 
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
@@ -159,8 +162,8 @@ const RankingSection = () => {
     updateSearchParam('rank', rank);
   };
 
-  const visibleCount = isExpanded ? fullCount : initCount;
-  const productList = Array.from({ length: fullCount }, (_, i) => ({
+  const visibleCount = isExpanded ? FULL_COUNT : INIT_COUNT;
+  const productList = Array.from({ length: FULL_COUNT }, (_, i) => ({
     ...productMockData[0],
     id: productMockData[0].id + i,
   }));
@@ -196,7 +199,10 @@ const RankingSection = () => {
 
       <ProductGrid>
         {productList.slice(0, visibleCount).map((item, idx) => (
-          <ProductCard key={item.id} onClick={() => navigate(`/order/${item.id}`)}>
+          <ProductCard
+            key={item.id}
+            onClick={() => (user ? navigate(ROUTE.ORDER(item.id)) : navigate(ROUTE.LOGIN))}
+          >
             <Badge isTop3={idx < 3}>{idx + 1}</Badge>
             <img src={item.imageURL} alt={item.name} />
             <Brand>{item.brandInfo.name}</Brand>
