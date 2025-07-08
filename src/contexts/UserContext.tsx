@@ -13,15 +13,33 @@ interface UserContextType {
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
+const isUser = (obj: unknown): obj is User => {
+  return (
+    typeof obj === 'object' &&
+    obj !== null &&
+    'email' in obj &&
+    typeof (obj as { email: unknown }).email === 'string'
+  );
+};
+
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const storedUser = sessionStorage.getItem('user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+
+    try {
+      if (storedUser) {
+        const parsed = JSON.parse(storedUser);
+        if (isUser(parsed)) {
+          setUser(parsed);
+        }
+      }
+    } catch (err) {
+      console.warn('유저 파싱 실패', err);
     }
+
     setIsLoading(false);
   }, []);
 
