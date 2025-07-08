@@ -1,25 +1,25 @@
-import styled from '@emotion/styled'
-import { useUser } from '@/contexts/UserContext'
-import { useNavigate } from 'react-router-dom'
-import { ROUTE } from '@/constants/routes'
+import styled from '@emotion/styled';
+import { useUser } from '@/contexts/UserContext';
+import { useNavigate } from 'react-router-dom';
+import { ROUTE } from '@/constants/routes';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => `${theme.spacing.spacing12} ${theme.spacing.spacing4}`};
-`
+`;
 
 const Title = styled.h2`
   font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
   font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
   line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
   margin-bottom: ${({ theme }) => theme.spacing.spacing2};
-`
+`;
 
 const Text = styled.p`
   font-size: ${({ theme }) => theme.typography.body2Regular.fontSize};
   line-height: ${({ theme }) => theme.typography.body2Regular.lineHeight};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
   margin-bottom: ${({ theme }) => theme.spacing.spacing1};
-`
+`;
 
 const Button = styled.button`
   margin-top: ${({ theme }) => theme.spacing.spacing5};
@@ -29,14 +29,14 @@ const Button = styled.button`
   border: none;
   border-radius: ${({ theme }) => theme.spacing.spacing2};
   cursor: pointer;
-`
+`;
 
 const MyPage = () => {
-  const { user, logout } = useUser()
-  const navigate = useNavigate()
+  const { user, logout } = useUser();
+  const navigate = useNavigate();
 
-  const { email } = user!
-  const username = email.split('@')[0]
+  const { email } = user!;
+  const username = email.split('@')[0];
 
   return (
     <Wrapper>
@@ -45,14 +45,14 @@ const MyPage = () => {
       <Text>이메일 주소는 {email}입니다.</Text>
       <Button
         onClick={() => {
-          logout()
-          navigate(ROUTE.LOGIN)
+          logout();
+          navigate(ROUTE.LOGIN);
         }}
       >
         로그아웃
       </Button>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default MyPage
+export default MyPage;

@@ -1,57 +1,62 @@
-import { useParams } from 'react-router-dom'
-import styled from '@emotion/styled'
-import { useState } from 'react'
-import { productMockData } from '@/mocks/products'
-import { messageCardMockData } from '@/mocks/messageCards'
-import { useInput } from '@/hooks/useInput'
-import { messageRequiredValidator, nameRequiredValidator, phoneValidator, quantityValidator } from '@/utils/validator'
-import { useNavigate } from 'react-router-dom'
-import ErrorMessage from '@/components/ErrorMessage'
-import OrderField from '@/components/OrderField'
-import { ROUTE } from '@/constants/routes'
+import { useParams } from 'react-router-dom';
+import styled from '@emotion/styled';
+import { useState } from 'react';
+import { productMockData } from '@/mocks/products';
+import { messageCardMockData } from '@/mocks/messageCards';
+import { useInput } from '@/hooks/useInput';
+import {
+  messageRequiredValidator,
+  nameRequiredValidator,
+  phoneValidator,
+  quantityValidator,
+} from '@/utils/validator';
+import { useNavigate } from 'react-router-dom';
+import ErrorMessage from '@/components/ErrorMessage';
+import OrderField from '@/components/OrderField';
+import { ROUTE } from '@/constants/routes';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
-`
+`;
 
 const CardSelector = styled.div`
   display: flex;
   overflow-x: auto;
   gap: ${({ theme }) => theme.spacing.spacing2};
   margin-bottom: ${({ theme }) => theme.spacing.spacing4};
-`
+`;
 
 const Thumb = styled.img<{ isSelected: boolean }>`
   width: 72px;
   height: 72px;
   border-radius: ${({ theme }) => theme.spacing.spacing2};
-  border: 2px solid ${({ isSelected, theme }) =>
-    isSelected ? theme.colors.semantic.kakaoYellow : 'transparent'};
+  border: 2px solid
+    ${({ isSelected, theme }) => (isSelected ? theme.colors.semantic.kakaoYellow : 'transparent')};
   cursor: pointer;
-`
+`;
 
 const MainImage = styled.img`
   width: 100%;
   max-width: 300px;
   display: block;
   margin: 0 auto ${({ theme }) => theme.spacing.spacing4};
-`
+`;
 
 const Section = styled.section`
   margin-bottom: ${({ theme }) => theme.spacing.spacing5};
-`
+`;
 
 const Label = styled.label`
   display: block;
   font-weight: bold;
   margin-bottom: ${({ theme }) => theme.spacing.spacing2};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-`
+`;
 
 const Note = styled.p`
   font-size: ${({ theme }) => theme.typography.label2Regular.fontSize};
   color: ${({ theme }) => theme.colors.semantic.textSub};
-`
+`;
 
 const ProductInfo = styled.div`
   display: flex;
@@ -74,7 +79,7 @@ const ProductInfo = styled.div`
     flex: 1;
     color: ${({ theme }) => theme.colors.semantic.textDefault};
   }
-`
+`;
 
 const OrderButton = styled.button`
   width: 100%;
@@ -89,30 +94,30 @@ const OrderButton = styled.button`
   text-align: center;
   box-sizing: border-box;
   margin-top: ${({ theme }) => theme.spacing.spacing5};
-`
+`;
 
 const OrderPage = () => {
-  const { productId } = useParams()
-  const product = productMockData.find((p) => p.id === Number(productId))
-  const [selectedCardId, setSelectedCardId] = useState(messageCardMockData[0].id)
-  const selectedCard = messageCardMockData.find((c) => c.id === selectedCardId)
+  const { productId } = useParams();
+  const product = productMockData.find((p) => p.id === Number(productId));
+  const [selectedCardId, setSelectedCardId] = useState(messageCardMockData[0].id);
+  const selectedCard = messageCardMockData.find((c) => c.id === selectedCardId);
 
-  const messageInput = useInput(selectedCard?.defaultTextMessage || '', messageRequiredValidator)
-  const senderInput = useInput('', nameRequiredValidator)
-  const receiverNameInput = useInput('', nameRequiredValidator)
-  const receiverPhoneInput = useInput('', phoneValidator)
-  const quantityInput = useInput('1', quantityValidator)
+  const messageInput = useInput(selectedCard?.defaultTextMessage || '', messageRequiredValidator);
+  const senderInput = useInput('', nameRequiredValidator);
+  const receiverNameInput = useInput('', nameRequiredValidator);
+  const receiverPhoneInput = useInput('', phoneValidator);
+  const quantityInput = useInput('1', quantityValidator);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  if (!product) return <div>상품을 찾을 수 없습니다.</div>
+  if (!product) return <div>상품을 찾을 수 없습니다.</div>;
 
   const handleSubmit = () => {
-    messageInput.onBlur()
-    senderInput.onBlur()
-    receiverNameInput.onBlur()
-    receiverPhoneInput.onBlur()
-    quantityInput.onBlur()
+    messageInput.onBlur();
+    senderInput.onBlur();
+    receiverNameInput.onBlur();
+    receiverPhoneInput.onBlur();
+    quantityInput.onBlur();
 
     if (
       messageInput.isValid &&
@@ -124,15 +129,15 @@ const OrderPage = () => {
     ) {
       alert(
         `주문이 완료되었습니다.\n` +
-        `상품명: ${product.name}\n` +
-        `구매 수량: ${quantityInput.value}\n` +
-        `발신자 이름: ${senderInput.value}\n` +
-        `메시지: ${messageInput.value}`
-      )
+          `상품명: ${product.name}\n` +
+          `구매 수량: ${quantityInput.value}\n` +
+          `발신자 이름: ${senderInput.value}\n` +
+          `메시지: ${messageInput.value}`
+      );
 
-      navigate(ROUTE.MAIN)
+      navigate(ROUTE.MAIN);
     }
-  }
+  };
 
   return (
     <Wrapper>
@@ -142,8 +147,8 @@ const OrderPage = () => {
             key={card.id}
             src={card.thumbUrl}
             onClick={() => {
-              setSelectedCardId(card.id)
-              messageInput.onChange({ target: { value: card.defaultTextMessage } } as any)
+              setSelectedCardId(card.id);
+              messageInput.onChange({ target: { value: card.defaultTextMessage } } as any);
             }}
             isSelected={selectedCardId === card.id}
           />
@@ -213,7 +218,9 @@ const OrderPage = () => {
           <div>
             <div>{product.name}</div>
             <div>{product.brandInfo.name}</div>
-            <div><strong>{product.price.sellingPrice.toLocaleString()}원</strong></div>
+            <div>
+              <strong>{product.price.sellingPrice.toLocaleString()}원</strong>
+            </div>
           </div>
         </ProductInfo>
       </Section>
@@ -222,7 +229,7 @@ const OrderPage = () => {
         {(product.price.sellingPrice * Number(quantityInput.value)).toLocaleString()}원 주문하기
       </OrderButton>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default OrderPage
+export default OrderPage;

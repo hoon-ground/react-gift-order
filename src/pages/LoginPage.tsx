@@ -1,10 +1,10 @@
-import styled from '@emotion/styled'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useInput } from '@/hooks/useInput'
-import { emailValidator, passwordValidator } from '@/utils/validator'
-import { useUser } from '@/contexts/UserContext'
-import ErrorMessage from '@/components/ErrorMessage'
-import { ROUTE } from '@/constants/routes'
+import styled from '@emotion/styled';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useInput } from '@/hooks/useInput';
+import { emailValidator, passwordValidator } from '@/utils/validator';
+import { useUser } from '@/contexts/UserContext';
+import ErrorMessage from '@/components/ErrorMessage';
+import { ROUTE } from '@/constants/routes';
 
 const Wrapper = styled.section`
   display: flex;
@@ -14,7 +14,7 @@ const Wrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing6};
   min-height: 100vh;
   background-color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
-`
+`;
 
 const Title = styled.h1`
   font-size: ${({ theme }) => theme.typography.title1Bold.fontSize};
@@ -22,7 +22,7 @@ const Title = styled.h1`
   line-height: ${({ theme }) => theme.typography.title1Bold.lineHeight};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
   margin-bottom: ${({ theme }) => theme.spacing.spacing6};
-`
+`;
 
 const Input = styled.input`
   width: 100%;
@@ -37,11 +37,10 @@ const Input = styled.input`
   caret-color: ${({ theme }) => theme.colors.semantic.textDefault};
   outline: none;
 
-
   &::placeholder {
     color: ${({ theme }) => theme.colors.semantic.textPlaceholder};
   }
-`
+`;
 
 const Button = styled.button`
   width: 100%;
@@ -57,24 +56,24 @@ const Button = styled.button`
   text-align: center;
   cursor: ${({ disabled }) => (disabled ? 'not-allowed' : 'pointer')};
   opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
-`
+`;
 
 const LoginPage = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const emailInput = useInput('', emailValidator)
-  const passwordInput = useInput('', passwordValidator)
-  const isFormValid = emailInput.isValid && passwordInput.isValid
-  const { login } = useUser()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const emailInput = useInput('', emailValidator);
+  const passwordInput = useInput('', passwordValidator);
+  const isFormValid = emailInput.isValid && passwordInput.isValid;
+  const { login } = useUser();
 
   const handleLogin = () => {
     if (isFormValid) {
-      login({ email: emailInput.value })
+      login({ email: emailInput.value });
 
-      const from = location.state?.from?.pathname || ROUTE.MAIN
-      navigate(from, { replace: true })
+      const from = location.state?.from?.pathname || ROUTE.MAIN;
+      navigate(from, { replace: true });
     }
-  }
+  };
 
   return (
     <Wrapper>
@@ -97,9 +96,11 @@ const LoginPage = () => {
         onBlur={passwordInput.onBlur}
       />
       <ErrorMessage message={passwordInput.error} />
-      <Button onClick={handleLogin} disabled={!isFormValid}>로그인</Button>
+      <Button onClick={handleLogin} disabled={!isFormValid}>
+        로그인
+      </Button>
     </Wrapper>
-  )
-}
+  );
+};
 
-export default LoginPage
+export default LoginPage;

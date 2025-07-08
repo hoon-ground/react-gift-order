@@ -1,9 +1,9 @@
-import styled from '@emotion/styled'
-import { categoryMockData } from '@/mocks/categories'
+import styled from '@emotion/styled';
+import { categoryMockData } from '@/mocks/categories';
 
 const SectionWrapper = styled.section`
   padding: ${({ theme }) => theme.spacing.spacing4};
-`
+`;
 
 const Title = styled.h2`
   font-size: ${({ theme }) => theme.typography.subtitle1Bold.fontSize};
@@ -11,13 +11,13 @@ const Title = styled.h2`
   line-height: ${({ theme }) => theme.typography.subtitle1Bold.lineHeight};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
   margin-bottom: ${({ theme }) => theme.spacing.spacing3};
-`
+`;
 
 const Grid = styled.ul`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: ${({ theme }) => theme.spacing.spacing4} ${({ theme }) => theme.spacing.spacing3};
-`
+`;
 
 const Item = styled.li`
   display: flex;
@@ -28,7 +28,7 @@ const Item = styled.li`
   &:hover {
     opacity: 0.85;
   }
-`
+`;
 
 const Image = styled.img`
   width: ${({ theme }) => theme.spacing.spacing14};
@@ -36,14 +36,14 @@ const Image = styled.img`
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: ${({ theme }) => theme.spacing.spacing1};
-`
+`;
 
 const Label = styled.div`
   font-size: ${({ theme }) => theme.typography.label2Regular.fontSize};
   font-weight: ${({ theme }) => theme.typography.label2Regular.fontWeight};
   line-height: ${({ theme }) => theme.typography.label2Regular.lineHeight};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-`
+`;
 
 const CategorySection = () => {
   return (
@@ -58,7 +58,7 @@ const CategorySection = () => {
         ))}
       </Grid>
     </SectionWrapper>
-  )
-}
+  );
+};
 
-export default CategorySection
+export default CategorySection;

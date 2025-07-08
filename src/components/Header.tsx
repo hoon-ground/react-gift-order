@@ -1,8 +1,8 @@
-import styled from '@emotion/styled'
-import { FaChevronLeft, FaUser } from 'react-icons/fa'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useUser } from '@/contexts/UserContext'
-import { ROUTE } from '@/constants/routes'
+import styled from '@emotion/styled';
+import { FaChevronLeft, FaUser } from 'react-icons/fa';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useUser } from '@/contexts/UserContext';
+import { ROUTE } from '@/constants/routes';
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -19,7 +19,7 @@ const HeaderWrapper = styled.header`
   width: 100%;
   max-width: 720px;
   z-index: 999;
-`
+`;
 
 const Title = styled.h1`
   position: absolute;
@@ -29,33 +29,33 @@ const Title = styled.h1`
   font-weight: ${({ theme }) => theme.typography.title2Bold.fontWeight};
   line-height: ${({ theme }) => theme.typography.title2Bold.lineHeight};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
-`
+`;
 
 const IconButton = styled.button<{ disabled?: boolean }>`
   font-size: ${({ theme }) => theme.typography.title2Bold.fontSize};
   color: ${({ theme }) => theme.colors.gray.gray800};
   z-index: 1;
   cursor: ${({ disabled }) => (disabled ? 'default' : 'pointer')};
-`
+`;
 
 const Header = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const { user } = useUser()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useUser();
 
-  const isLoginPage = location.pathname === ROUTE.LOGIN
+  const isLoginPage = location.pathname === ROUTE.LOGIN;
 
   const handleGoBack = () => {
-    navigate(-1)
-  }
+    navigate(-1);
+  };
 
   const handleGoLoginOrMyPage = () => {
     if (user) {
-      navigate(ROUTE.MY)
+      navigate(ROUTE.MY);
     } else if (!isLoginPage) {
-      navigate(ROUTE.LOGIN)
+      navigate(ROUTE.LOGIN);
     }
-  }
+  };
 
   return (
     <HeaderWrapper>
@@ -67,7 +67,7 @@ const Header = () => {
         <FaUser />
       </IconButton>
     </HeaderWrapper>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

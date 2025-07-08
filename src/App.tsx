@@ -1,14 +1,14 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import MainPage from '@/pages/MainPage'
-import LoginPage from '@/pages/LoginPage'
-import NotFoundPage from '@/pages/NotFoundPage'
-import MyPage from '@/pages/MyPage'
-import OrderPage from '@/pages/OrderPage'
-import Layout from '@/components/Layout'
-import { UserProvider } from '@/contexts/UserContext'
-import { ROUTE } from '@/constants/routes'
-import AuthRoute from '@/routes/AuthRoute'
-import PublicRoute from '@/routes/PublicRoute'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainPage from '@/pages/MainPage';
+import LoginPage from '@/pages/LoginPage';
+import NotFoundPage from '@/pages/NotFoundPage';
+import MyPage from '@/pages/MyPage';
+import OrderPage from '@/pages/OrderPage';
+import Layout from '@/components/Layout';
+import { UserProvider } from '@/contexts/UserContext';
+import { ROUTE } from '@/constants/routes';
+import AuthRoute from '@/routes/AuthRoute';
+import PublicRoute from '@/routes/PublicRoute';
 
 const App = () => {
   return (
@@ -53,7 +53,7 @@ const App = () => {
         </Routes>
       </UserProvider>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default App
+export default App;
