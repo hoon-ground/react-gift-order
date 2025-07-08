@@ -1,14 +1,14 @@
 import { useParams } from 'react-router-dom'
 import styled from '@emotion/styled'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { productMockData } from '@/mocks/products'
 import { messageCardMockData } from '@/mocks/messageCards'
 import { useInput } from '@/hooks/useInput'
 import { messageRequiredValidator, nameRequiredValidator, phoneValidator, quantityValidator } from '@/utils/validator'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { useUser } from '@/contexts/UserContext'
+import { useNavigate } from 'react-router-dom'
 import ErrorMessage from '@/components/ErrorMessage'
 import OrderField from '@/components/OrderField'
+import { ROUTE } from '@/constants/routes'
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -104,14 +104,6 @@ const OrderPage = () => {
   const quantityInput = useInput('1', quantityValidator)
 
   const navigate = useNavigate()
-  const { user, isLoading } = useUser()
-  const location = useLocation()
-
-  useEffect(() => {
-    if (!isLoading && !user) {
-      navigate('/login', { state: { from: location }, replace: true })
-    }
-  }, [user, isLoading])
 
   if (!product) return <div>상품을 찾을 수 없습니다.</div>
 
@@ -138,7 +130,7 @@ const OrderPage = () => {
         `메시지: ${messageInput.value}`
       )
 
-      navigate('/')
+      navigate(ROUTE.MAIN)
     }
   }
 

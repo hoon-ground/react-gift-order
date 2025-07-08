@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { useUser } from '@/contexts/UserContext'
 import { useNavigate } from 'react-router-dom'
-import { useEffect } from 'react'
 import { ROUTE } from '@/constants/routes'
 
 const Wrapper = styled.div`
@@ -36,15 +35,7 @@ const MyPage = () => {
   const { user, logout } = useUser()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (!user) {
-      navigate(ROUTE.LOGIN)
-    }
-  }, [user, navigate])
-
-  if (!user) return null
-
-  const { email } = user
+  const { email } = user!
   const username = email.split('@')[0]
 
   return (
