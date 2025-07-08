@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { FaChevronLeft, FaUser } from 'react-icons/fa'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useUser } from '@/contexts/UserContext'
+import { ROUTE } from '@/constants/routes'
 
 const HeaderWrapper = styled.header`
   display: flex;
@@ -42,7 +43,7 @@ const Header = () => {
   const location = useLocation()
   const { user } = useUser()
 
-  const isLoginPage = location.pathname === '/login'
+  const isLoginPage = location.pathname === ROUTE.LOGIN
 
   const handleGoBack = () => {
     navigate(-1)
@@ -50,9 +51,9 @@ const Header = () => {
 
   const handleGoLoginOrMyPage = () => {
     if (user) {
-      navigate('/my')
+      navigate(ROUTE.MY)
     } else if (!isLoginPage) {
-      navigate('/login')
+      navigate(ROUTE.LOGIN)
     }
   }
 

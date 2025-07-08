@@ -1,5 +1,6 @@
 import styled from '@emotion/styled'
 import { useNavigate } from 'react-router-dom'
+import { ROUTE } from '@/constants/routes'
 
 const Wrapper = styled.div`
   display: flex;
@@ -41,7 +42,7 @@ const NotFoundPage = () => {
     <Wrapper>
       <Title>잘못된 접근입니다.</Title>
       <Description>찾으시는 페이지가 존재하지 않습니다.</Description>
-      <Button onClick={() => navigate('/')}>홈으로</Button>
+      <Button onClick={() => navigate(ROUTE.MAIN)}>홈으로</Button>
     </Wrapper>
   )
 }

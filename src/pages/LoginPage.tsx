@@ -4,6 +4,7 @@ import { useInput } from '@/hooks/useInput'
 import { emailValidator, passwordValidator } from '@/utils/validator'
 import { useUser } from '@/contexts/UserContext'
 import ErrorMessage from '@/components/ErrorMessage'
+import { ROUTE } from '@/constants/routes'
 
 const Wrapper = styled.section`
   display: flex;
@@ -70,7 +71,7 @@ const LoginPage = () => {
     if (isFormValid) {
       login({ email: emailInput.value })
 
-      const from = location.state?.from?.pathname || '/'
+      const from = location.state?.from?.pathname || ROUTE.MAIN
       navigate(from, { replace: true })
     }
   }

@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import { useUser } from '@/contexts/UserContext'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
+import { ROUTE } from '@/constants/routes'
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => `${theme.spacing.spacing12} ${theme.spacing.spacing4}`};
@@ -37,7 +38,7 @@ const MyPage = () => {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login')
+      navigate(ROUTE.LOGIN)
     }
   }, [user, navigate])
 
@@ -54,7 +55,7 @@ const MyPage = () => {
       <Button
         onClick={() => {
           logout()
-          navigate('/login')
+          navigate(ROUTE.LOGIN)
         }}
       >
         로그아웃
