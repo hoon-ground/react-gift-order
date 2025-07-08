@@ -148,22 +148,12 @@ const OrderPage = () => {
       <OrderField
         label="메시지"
         as="textarea"
-        value={messageInput.value}
-        onChange={messageInput.onChange}
-        onBlur={messageInput.onBlur}
         placeholder="축하 메시지를 입력하세요."
-        error={messageInput.error}
+        {...messageInput}
       />
 
       <Section>
-        <OrderField
-          label="보내는 사람"
-          value={senderInput.value}
-          onChange={senderInput.onChange}
-          onBlur={senderInput.onBlur}
-          placeholder="이름을 입력하세요."
-          error={senderInput.error}
-        />
+        <OrderField label="보내는 사람" placeholder="이름을 입력하세요." {...senderInput} />
         {!senderInput.error && (
           <Note>* 실제 선물 발송 시 발신자 이름으로 반영되는 정보입니다.</Note>
         )}
@@ -171,32 +161,9 @@ const OrderPage = () => {
 
       <Section>
         <Label>받는 사람</Label>
-        <OrderField
-          label="이름"
-          value={receiverNameInput.value}
-          onChange={receiverNameInput.onChange}
-          onBlur={receiverNameInput.onBlur}
-          placeholder="이름을 입력하세요."
-          error={receiverNameInput.error}
-        />
-        <OrderField
-          label="전화번호"
-          value={receiverPhoneInput.value}
-          onChange={receiverPhoneInput.onChange}
-          onBlur={receiverPhoneInput.onBlur}
-          placeholder="전화번호를 입력하세요."
-          error={receiverPhoneInput.error}
-        />
-        <OrderField
-          label="수량"
-          type="number"
-          min={1}
-          value={quantityInput.value}
-          onChange={quantityInput.onChange}
-          onBlur={quantityInput.onBlur}
-          placeholder="수량"
-          error={quantityInput.error}
-        />
+        <OrderField label="이름" placeholder="이름을 입력하세요." {...receiverNameInput} />
+        <OrderField label="전화번호" placeholder="전화번호를 입력하세요." {...receiverPhoneInput} />
+        <OrderField label="수량" type="number" min={1} placeholder="수량" {...quantityInput} />
       </Section>
 
       <Section>
