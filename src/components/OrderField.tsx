@@ -43,17 +43,26 @@ const Textarea = styled.textarea`
   min-height: 100px;
 `;
 
-interface OrderFieldProps {
+type BaseProps = {
   label: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onBlur?: () => void;
   placeholder?: string;
   error?: string;
-  as?: 'input' | 'textarea';
-  type?: string;
+};
+
+type InputProps = BaseProps & {
+  as?: 'input';
+  type?: React.HTMLInputTypeAttribute;
   min?: number;
-}
+};
+
+type TextAreaProps = BaseProps & {
+  as: 'textarea';
+};
+
+type OrderFieldProps = InputProps | TextAreaProps;
 
 const OrderField = ({
   label,
@@ -63,8 +72,7 @@ const OrderField = ({
   placeholder,
   error,
   as = 'input',
-  type = 'text',
-  min,
+  ...rest
 }: OrderFieldProps) => {
   return (
     <ReceiverTab>
@@ -74,12 +82,11 @@ const OrderField = ({
           <Textarea value={value} onChange={onChange} onBlur={onBlur} placeholder={placeholder} />
         ) : (
           <Input
-            type={type}
-            min={min}
             value={value}
             onChange={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
+            {...rest}
           />
         )}
         <ErrorMessage message={error} />
