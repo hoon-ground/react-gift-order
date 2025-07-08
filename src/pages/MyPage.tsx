@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { useUser } from '@/contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
 import { ROUTE } from '@/constants/routes';
+import { getUserName } from '@/utils/user';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => `${theme.spacing.spacing12} ${theme.spacing.spacing4}`};
@@ -36,7 +37,7 @@ const MyPage = () => {
   const navigate = useNavigate();
 
   const { email } = user!;
-  const username = email.split('@')[0];
+  const username = getUserName(email);
 
   return (
     <Wrapper>
