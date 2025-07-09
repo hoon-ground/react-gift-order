@@ -1,21 +1,59 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import MainPage from './pages/MainPage'
-import LoginPage from './pages/LoginPage'
-import NotFoundPage from './pages/NotFoundPage'
-import Layout from '@/components/Layout'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import MainPage from '@/pages/MainPage';
+import LoginPage from '@/pages/LoginPage';
+import NotFoundPage from '@/pages/NotFoundPage';
+import MyPage from '@/pages/MyPage';
+import OrderPage from '@/pages/OrderPage';
+import Layout from '@/components/Layout';
+import { UserProvider } from '@/contexts/UserContext';
+import { ROUTE } from '@/constants/routes';
+import AuthRoute from '@/routes/AuthRoute';
+import PublicRoute from '@/routes/PublicRoute';
 
 const App = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
-  )
-}
+      <UserProvider>
+        <Routes>
+          <Route element={<Layout />}>
+            {/* 메인페이지 */}
+            <Route path={ROUTE.MAIN} element={<MainPage />} />
 
-export default App
+            {/* 로그인 안한 유저만 접근 */}
+            <Route
+              path={ROUTE.LOGIN}
+              element={
+                <PublicRoute>
+                  <LoginPage />
+                </PublicRoute>
+              }
+            />
+
+            {/* 로그인 한 유저만 접근 */}
+            <Route
+              path={ROUTE.MY}
+              element={
+                <AuthRoute>
+                  <MyPage />
+                </AuthRoute>
+              }
+            />
+            <Route
+              path={ROUTE.ORDER()}
+              element={
+                <AuthRoute>
+                  <OrderPage />
+                </AuthRoute>
+              }
+            />
+
+            {/* 404 */}
+            <Route path={ROUTE.NOT_FOUND} element={<NotFoundPage />} />
+          </Route>
+        </Routes>
+      </UserProvider>
+    </BrowserRouter>
+  );
+};
+
+export default App;

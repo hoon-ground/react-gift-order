@@ -1,17 +1,17 @@
-import CategorySection from '@/components/CategorySection'
-import FriendSelection from '@/components/FriendSelection'
-import DisplaySection from '@/components/DisplaySection'
-import RankingSection from '@/components/RankingSection'
+import CategorySection from '@/components/CategorySection';
+import FriendSelection from '@/components/FriendSelection';
+import DisplaySection from '@/components/DisplaySection';
+import RankingSection from '@/components/RankingSection';
 
 const MainPage = () => {
-    return (
-        <>
-            <FriendSelection />
-            <CategorySection />
-            <DisplaySection />
-            <RankingSection />
-        </>
-    )
-}
+  return (
+    <>
+      <FriendSelection />
+      <CategorySection />
+      <DisplaySection />
+      <RankingSection />
+    </>
+  );
+};
 
-export default MainPage
+export default MainPage;

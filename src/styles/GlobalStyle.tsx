@@ -1,4 +1,4 @@
-import { Global, css } from '@emotion/react'
+import { Global, css } from '@emotion/react';
 
 const globalStyles = css`
   *,
@@ -12,8 +12,15 @@ const globalStyles = css`
   html,
   body {
     height: 100%;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-      Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      'Pretendard',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      'Helvetica Neue',
+      Arial,
+      sans-serif;
     background-color: #f9f9f9;
     color: #222;
     line-height: 1.5;
@@ -47,7 +54,7 @@ const globalStyles = css`
     max-width: 100%;
     display: block;
   }
-`
+`;
 export function GlobalStyle() {
-  return <Global styles={globalStyles} />
+  return <Global styles={globalStyles} />;
 }

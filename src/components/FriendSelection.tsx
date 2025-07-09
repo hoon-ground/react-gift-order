@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { FaPlus } from 'react-icons/fa'
+import styled from '@emotion/styled';
+import { FaPlus } from 'react-icons/fa';
 
 const Wrapper = styled.section`
   display: flex;
@@ -15,7 +15,7 @@ const Wrapper = styled.section`
   &:hover {
     opacity: 0.85;
   }
-`
+`;
 
 const Text = styled.p`
   font-size: ${({ theme }) => theme.typography.subtitle1Regular.fontSize};
@@ -23,7 +23,7 @@ const Text = styled.p`
   line-height: ${({ theme }) => theme.typography.subtitle1Regular.lineHeight};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
   margin: 0;
-`
+`;
 
 const PlusButton = styled.button`
   background-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
@@ -36,21 +36,21 @@ const PlusButton = styled.button`
   font-size: ${({ theme }) => theme.typography.label1Bold.fontSize};
   color: ${({ theme }) => theme.colors.gray.gray1000};
   cursor: pointer;
-`
+`;
 
 const FriendSelection = () => {
-    const handleClick = () => {
-        alert('친구 선택 페이지로 이동 구현 예정.')
-    }
+  const handleClick = () => {
+    alert('친구 선택 페이지로 이동 구현 예정.');
+  };
 
-    return (
-        <Wrapper onClick={handleClick}>
-            <PlusButton>
-                <FaPlus />
-            </PlusButton>
-            <Text>선물할 친구를 선택해 주세요.</Text>
-        </Wrapper>
-    )
-}
+  return (
+    <Wrapper onClick={handleClick}>
+      <PlusButton>
+        <FaPlus />
+      </PlusButton>
+      <Text>선물할 친구를 선택해 주세요.</Text>
+    </Wrapper>
+  );
+};
 
-export default FriendSelection
+export default FriendSelection;
