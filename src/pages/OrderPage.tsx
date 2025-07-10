@@ -1,18 +1,17 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { useState } from 'react';
 import { productMockData } from '@/mocks/products';
 import { messageCardMockData } from '@/mocks/messageCards';
-import { useInput } from '@/hooks/useInput';
 import {
   messageRequiredValidator,
   nameRequiredValidator,
   phoneValidator,
   quantityValidator,
 } from '@/utils/validator';
-import { useNavigate } from 'react-router-dom';
 import OrderField from '@/components/OrderField';
 import { ROUTE } from '@/constants/routes';
+import { useForm } from 'react-hook-form';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -95,37 +94,53 @@ const OrderButton = styled.button`
   margin-top: ${({ theme }) => theme.spacing.spacing5};
 `;
 
+type FormValues = {
+  message: string;
+  sender: string;
+  receiverName: string;
+  receiverPhone: string;
+  quantity: number;
+};
+
 const OrderPage = () => {
   const { productId } = useParams();
   const product = productMockData.find((p) => p.id === Number(productId));
   const [selectedCardId, setSelectedCardId] = useState(messageCardMockData[0].id);
   const selectedCard = messageCardMockData.find((c) => c.id === selectedCardId);
-
-  const messageInput = useInput(selectedCard?.defaultTextMessage || '', messageRequiredValidator);
-  const senderInput = useInput('', nameRequiredValidator);
-  const receiverNameInput = useInput('', nameRequiredValidator);
-  const receiverPhoneInput = useInput('', phoneValidator);
-  const quantityInput = useInput('1', quantityValidator);
-  const forms = [messageInput, senderInput, receiverNameInput, receiverPhoneInput, quantityInput];
   const navigate = useNavigate();
 
-  if (!product) return <div>상품을 찾을 수 없습니다.</div>;
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    watch,
+  } = useForm<FormValues>({
+    defaultValues: {
+      message: selectedCard?.defaultTextMessage || '',
+      sender: '',
+      receiverName: '',
+      receiverPhone: '',
+      quantity: 1,
+    },
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
+  });
 
-  const handleSubmit = () => {
-    const allValid = forms.every((f) => f.validate());
-
-    if (!allValid || !product) return;
+  const onSubmit = (data: FormValues) => {
+    if (!product) return;
 
     alert(
       `주문이 완료되었습니다.\n` +
         `상품명: ${product.name}\n` +
-        `구매 수량: ${quantityInput.value}\n` +
-        `발신자 이름: ${senderInput.value}\n` +
-        `메시지: ${messageInput.value}`
+        `구매 수량: ${data.quantity}\n` +
+        `발신자 이름: ${data.sender}\n` +
+        `메시지: ${data.message}`
     );
-
     navigate(ROUTE.MAIN);
   };
+
+  if (!product) return <div>상품을 찾을 수 없습니다.</div>;
 
   return (
     <Wrapper>
@@ -136,7 +151,7 @@ const OrderPage = () => {
             src={card.thumbUrl}
             onClick={() => {
               setSelectedCardId(card.id);
-              messageInput.onChange({ target: { value: card.defaultTextMessage } } as any);
+              setValue('message', card.defaultTextMessage);
             }}
             isSelected={selectedCardId === card.id}
           />
@@ -145,44 +160,78 @@ const OrderPage = () => {
 
       <MainImage src={selectedCard?.imageUrl} alt="선택된 메시지 카드" />
 
-      <OrderField
-        label="메시지"
-        as="textarea"
-        placeholder="축하 메시지를 입력하세요."
-        {...messageInput}
-      />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <OrderField
+          label="메시지"
+          as="textarea"
+          placeholder="축하 메시지를 입력하세요."
+          {...register('message', {
+            validate: messageRequiredValidator,
+          })}
+          error={errors.message?.message}
+        />
 
-      <Section>
-        <OrderField label="보내는 사람" placeholder="이름을 입력하세요." {...senderInput} />
-        {!senderInput.error && (
-          <Note>* 실제 선물 발송 시 발신자 이름으로 반영되는 정보입니다.</Note>
-        )}
-      </Section>
+        <Section>
+          <OrderField
+            label="보내는 사람"
+            placeholder="이름을 입력하세요."
+            {...register('sender', {
+              validate: nameRequiredValidator,
+            })}
+            error={errors.sender?.message}
+          />
+          {!errors.sender && <Note>* 실제 선물 발송 시 발신자 이름으로 반영되는 정보입니다.</Note>}
+        </Section>
 
-      <Section>
-        <Label>받는 사람</Label>
-        <OrderField label="이름" placeholder="이름을 입력하세요." {...receiverNameInput} />
-        <OrderField label="전화번호" placeholder="전화번호를 입력하세요." {...receiverPhoneInput} />
-        <OrderField label="수량" type="number" min={1} placeholder="수량" {...quantityInput} />
-      </Section>
+        <Section>
+          <Label>받는 사람</Label>
+          <OrderField
+            label="이름"
+            placeholder="이름을 입력하세요."
+            {...register('receiverName', {
+              validate: nameRequiredValidator,
+            })}
+            error={errors.receiverName?.message}
+          />
+          <OrderField
+            label="전화번호"
+            placeholder="전화번호를 입력하세요."
+            {...register('receiverPhone', {
+              validate: phoneValidator,
+            })}
+            error={errors.receiverPhone?.message}
+          />
+          <OrderField
+            label="수량"
+            type="number"
+            min={1}
+            placeholder="수량"
+            {...register('quantity', {
+              valueAsNumber: true,
+              validate: quantityValidator,
+            })}
+            error={errors.quantity?.message}
+          />
+        </Section>
 
-      <Section>
-        <Label>상품 정보</Label>
-        <ProductInfo>
-          <img src={product.imageURL} alt={product.name} />
-          <div>
-            <div>{product.name}</div>
-            <div>{product.brandInfo.name}</div>
+        <Section>
+          <Label>상품 정보</Label>
+          <ProductInfo>
+            <img src={product.imageURL} alt={product.name} />
             <div>
-              <strong>{product.price.sellingPrice.toLocaleString()}원</strong>
+              <div>{product.name}</div>
+              <div>{product.brandInfo.name}</div>
+              <div>
+                <strong>{product.price.sellingPrice.toLocaleString()}원</strong>
+              </div>
             </div>
-          </div>
-        </ProductInfo>
-      </Section>
+          </ProductInfo>
+        </Section>
 
-      <OrderButton onClick={handleSubmit}>
-        {(product.price.sellingPrice * Number(quantityInput.value)).toLocaleString()}원 주문하기
-      </OrderButton>
+        <OrderButton type="submit">
+          {(product.price.sellingPrice * watch('quantity')).toLocaleString()}원 주문하기
+        </OrderButton>
+      </form>
     </Wrapper>
   );
 };
