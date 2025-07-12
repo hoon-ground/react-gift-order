@@ -3,18 +3,17 @@ import styled from '@emotion/styled';
 import { useState } from 'react';
 import { productMockData } from '@/mocks/products';
 import { messageCardMockData } from '@/mocks/messageCards';
-import {
-  messageRequiredValidator,
-  nameRequiredValidator,
-  phoneValidator,
-  quantityValidator,
-} from '@/utils/validator';
+import { messageRequiredValidator, nameRequiredValidator } from '@/utils/validator';
 import OrderField from '@/components/OrderField';
 import { ROUTE } from '@/constants/routes';
 import { useForm } from 'react-hook-form';
+import RecipientModal, { type Recipient } from '@/components/RecipientModal';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
+  padding-bottom: 100px;
+  max-width: 720px;
+  margin: 0 auto;
 `;
 
 const CardSelector = styled.div`
@@ -45,7 +44,6 @@ const Section = styled.section`
 `;
 
 const Label = styled.label`
-  display: block;
   font-weight: bold;
   margin-bottom: ${({ theme }) => theme.spacing.spacing2};
   color: ${({ theme }) => theme.colors.semantic.textDefault};
@@ -54,6 +52,7 @@ const Label = styled.label`
 const Note = styled.p`
   font-size: ${({ theme }) => theme.typography.label2Regular.fontSize};
   color: ${({ theme }) => theme.colors.semantic.textSub};
+  margin-top: ${({ theme }) => theme.spacing.spacing1};
 `;
 
 const ProductInfo = styled.div`
@@ -63,7 +62,6 @@ const ProductInfo = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
   border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
   border-radius: ${({ theme }) => theme.spacing.spacing2};
-  margin-bottom: ${({ theme }) => theme.spacing.spacing6};
   background-color: ${({ theme }) => theme.colors.semantic.backgroundFill};
 
   img {
@@ -80,26 +78,69 @@ const ProductInfo = styled.div`
 `;
 
 const OrderButton = styled.button`
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 690px;
+  margin: 0 auto;
   width: 100%;
   padding: ${({ theme }) => theme.spacing.spacing4};
   background-color: ${({ theme }) => theme.colors.semantic.kakaoYellow};
   font-weight: ${({ theme }) => theme.typography.body1Bold.fontWeight};
   font-size: ${({ theme }) => theme.typography.body1Bold.fontSize};
   color: ${({ theme }) => theme.colors.gray.gray1000};
-  border-radius: ${({ theme }) => theme.spacing.spacing2};
-  position: sticky;
-  bottom: 0;
   text-align: center;
-  box-sizing: border-box;
-  margin-top: ${({ theme }) => theme.spacing.spacing5};
+  border: none;
+  z-index: 100;
+`;
+
+const RecipientHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${({ theme }) => theme.spacing.spacing2};
+`;
+
+const EditButton = styled.button`
+  padding: ${({ theme }) => theme.spacing.spacing2};
+  background-color: ${({ theme }) => theme.colors.gray.gray100};
+  border-radius: ${({ theme }) => theme.spacing.spacing2};
+  font-size: ${({ theme }) => theme.typography.label1Bold.fontSize};
+  color: ${({ theme }) => theme.colors.semantic.textDefault};
+`;
+
+const EmptyRecipientBox = styled.div`
+  padding: ${({ theme }) => theme.spacing.spacing5};
+  border: 1px solid ${({ theme }) => theme.colors.gray.gray300};
+  border-radius: ${({ theme }) => theme.spacing.spacing2};
+  background-color: ${({ theme }) => theme.colors.semantic.backgroundDefault};
+  text-align: center;
+  color: ${({ theme }) => theme.colors.semantic.textSub};
+`;
+
+const RecipientTable = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: ${({ theme }) => theme.spacing.spacing2};
+
+  th,
+  td {
+    padding: ${({ theme }) => theme.spacing.spacing2};
+    text-align: left;
+    font-size: ${({ theme }) => theme.typography.body1Regular.fontSize};
+    border-bottom: 1px solid ${({ theme }) => theme.colors.gray.gray300};
+  }
+
+  th {
+    font-weight: ${({ theme }) => theme.typography.body1Bold.fontWeight};
+    color: ${({ theme }) => theme.colors.semantic.textDefault};
+  }
 `;
 
 type FormValues = {
   message: string;
   sender: string;
-  receiverName: string;
-  receiverPhone: string;
-  quantity: number;
 };
 
 const OrderPage = () => {
@@ -107,6 +148,8 @@ const OrderPage = () => {
   const product = productMockData.find((p) => p.id === Number(productId));
   const [selectedCardId, setSelectedCardId] = useState(messageCardMockData[0].id);
   const selectedCard = messageCardMockData.find((c) => c.id === selectedCardId);
+  const [recipients, setRecipients] = useState<Recipient[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const {
@@ -114,14 +157,10 @@ const OrderPage = () => {
     handleSubmit,
     setValue,
     formState: { errors },
-    watch,
   } = useForm<FormValues>({
     defaultValues: {
       message: selectedCard?.defaultTextMessage || '',
       sender: '',
-      receiverName: '',
-      receiverPhone: '',
-      quantity: 1,
     },
     mode: 'onBlur',
     reValidateMode: 'onChange',
@@ -133,7 +172,7 @@ const OrderPage = () => {
     alert(
       `주문이 완료되었습니다.\n` +
         `상품명: ${product.name}\n` +
-        `구매 수량: ${data.quantity}\n` +
+        `구매 수량: ${recipients.reduce((sum, r) => sum + r.quantity, 0)}\n` +
         `발신자 이름: ${data.sender}\n` +
         `메시지: ${data.message}`
     );
@@ -184,34 +223,38 @@ const OrderPage = () => {
         </Section>
 
         <Section>
-          <Label>받는 사람</Label>
-          <OrderField
-            label="이름"
-            placeholder="이름을 입력하세요."
-            {...register('receiverName', {
-              validate: nameRequiredValidator,
-            })}
-            error={errors.receiverName?.message}
-          />
-          <OrderField
-            label="전화번호"
-            placeholder="전화번호를 입력하세요."
-            {...register('receiverPhone', {
-              validate: phoneValidator,
-            })}
-            error={errors.receiverPhone?.message}
-          />
-          <OrderField
-            label="수량"
-            type="number"
-            min={1}
-            placeholder="수량"
-            {...register('quantity', {
-              valueAsNumber: true,
-              validate: quantityValidator,
-            })}
-            error={errors.quantity?.message}
-          />
+          <RecipientHeader>
+            <Label>받는 사람</Label>
+            <EditButton type="button" onClick={() => setIsModalOpen(true)}>
+              {recipients.length === 0 ? '+ 추가' : '수정'}
+            </EditButton>
+          </RecipientHeader>
+
+          {recipients.length === 0 ? (
+            <EmptyRecipientBox>
+              <p>받는 사람이 없습니다.</p>
+              <p>받는 사람을 추가해주세요.</p>
+            </EmptyRecipientBox>
+          ) : (
+            <RecipientTable>
+              <thead>
+                <tr>
+                  <th>이름</th>
+                  <th>전화번호</th>
+                  <th>수량</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recipients.map((r, i) => (
+                  <tr key={`${r.phone}-${i}`}>
+                    <td>{r.name}</td>
+                    <td>{r.phone}</td>
+                    <td>{r.quantity}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </RecipientTable>
+          )}
         </Section>
 
         <Section>
@@ -229,9 +272,23 @@ const OrderPage = () => {
         </Section>
 
         <OrderButton type="submit">
-          {(product.price.sellingPrice * watch('quantity')).toLocaleString()}원 주문하기
+          {(
+            product.price.sellingPrice * recipients.reduce((sum, r) => sum + r.quantity, 0)
+          ).toLocaleString()}
+          원 주문하기
         </OrderButton>
       </form>
+
+      {isModalOpen && (
+        <RecipientModal
+          initialRecipients={recipients}
+          onCancel={() => setIsModalOpen(false)}
+          onConfirm={(newList) => {
+            setRecipients(newList);
+            setIsModalOpen(false);
+          }}
+        />
+      )}
     </Wrapper>
   );
 };
