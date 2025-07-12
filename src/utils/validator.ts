@@ -27,6 +27,6 @@ export const phoneValidator = (value: string): true | string => {
 
 export const quantityValidator = (value: string | number): true | string => {
   const num = Number(value);
-  if (!value || isNaN(num)) return '수량을 입력해주세요.';
+  if (isNaN(num)) return '수량을 입력해주세요.';
   return num >= 1 || '구매 수량은 1개 이상이어야 합니다.';
 };
