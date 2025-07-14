@@ -211,11 +211,8 @@ const RecipientModal = ({ initialRecipients = [], onCancel, onConfirm }: Recipie
 
   useEffect(() => {
     const phones = watchRecipients.map((r) => r.phone);
-    const phoneCount: Record<string, number> = {};
-    phones.forEach((p) => {
-      phoneCount[p] = (phoneCount[p] || 0) + 1;
-    });
-    const hasDuplicate = Object.values(phoneCount).some((count) => count > 1);
+    const hasDuplicate = phones.length !== new Set(phones).size;
+
     if (hasDuplicate) {
       setError('recipients', { message: '중복된 전화번호가 있습니다.' });
     } else {
