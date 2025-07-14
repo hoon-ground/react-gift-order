@@ -246,8 +246,8 @@ const OrderPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {recipients.map((r, i) => (
-                  <tr key={`${r.phone}-${i}`}>
+                {recipients.map((r) => (
+                  <tr key={`${r.phone}-${r.name}`}>
                     <td>{r.name}</td>
                     <td>{r.phone}</td>
                     <td>{r.quantity}</td>
