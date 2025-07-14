@@ -30,3 +30,8 @@ export const quantityValidator = (value: string | number): true | string => {
   if (isNaN(num)) return '수량을 입력해주세요.';
   return num >= 1 || '구매 수량은 1개 이상이어야 합니다.';
 };
+
+export const hasDuplicates = (values: string[]): boolean => values.length !== new Set(values).size;
+
+export const isDuplicated = (target: string, values: string[]): boolean =>
+  values.filter((v) => v === target).length > 1;

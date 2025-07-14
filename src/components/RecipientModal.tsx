@@ -1,7 +1,13 @@
 import { useForm, useFieldArray } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
-import { nameRequiredValidator, phoneValidator, quantityValidator } from '@/utils/validator';
+import {
+  nameRequiredValidator,
+  phoneValidator,
+  quantityValidator,
+  hasDuplicates,
+  isDuplicated,
+} from '@/utils/validator';
 import { zIndex } from '@/constants/zIndex';
 
 const Overlay = styled.div`
@@ -211,7 +217,7 @@ const RecipientModal = ({ initialRecipients = [], onCancel, onConfirm }: Recipie
 
   useEffect(() => {
     const phones = watchRecipients.map((r) => r.phone);
-    const hasDuplicate = phones.length !== new Set(phones).size;
+    const hasDuplicate = hasDuplicates(phones);
 
     if (hasDuplicate) {
       setError('recipients', { message: '중복된 전화번호가 있습니다.' });
@@ -284,9 +290,12 @@ const RecipientModal = ({ initialRecipients = [], onCancel, onConfirm }: Recipie
                         validate: (value) => {
                           const result = phoneValidator(value);
                           if (result !== true) return result;
-                          const phones = watchRecipients.map((r) => r.phone);
-                          const duplicates = phones.filter((p) => p === value);
-                          return duplicates.length > 1 ? '중복된 전화번호가 있습니다.' : true;
+                          return isDuplicated(
+                            value,
+                            watchRecipients.map((r) => r.phone)
+                          )
+                            ? '중복된 전화번호가 있습니다.'
+                            : true;
                         },
                       })}
                     />
