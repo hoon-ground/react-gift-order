@@ -8,6 +8,7 @@ import OrderField from '@/components/OrderField';
 import { ROUTE } from '@/constants/routes';
 import { useForm } from 'react-hook-form';
 import RecipientModal, { type Recipient } from '@/components/RecipientModal';
+import { zIndex } from '@/constants/zIndex';
 
 const Wrapper = styled.div`
   padding: ${({ theme }) => theme.spacing.spacing4};
@@ -92,7 +93,7 @@ const OrderButton = styled.button`
   color: ${({ theme }) => theme.colors.gray.gray1000};
   text-align: center;
   border: none;
-  z-index: 100;
+  z-index: ${zIndex.base};
 `;
 
 const RecipientHeader = styled.div`

@@ -2,6 +2,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import styled from '@emotion/styled';
 import { useEffect } from 'react';
 import { nameRequiredValidator, phoneValidator, quantityValidator } from '@/utils/validator';
+import { zIndex } from '@/constants/zIndex';
 
 const Overlay = styled.div`
   position: fixed;
@@ -10,7 +11,7 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: ${zIndex.modalBackdrop};
 `;
 
 const Modal = styled.div`
@@ -21,6 +22,7 @@ const Modal = styled.div`
   height: 90vh;
   display: flex;
   flex-direction: column;
+  z-index: ${zIndex.modal};
 `;
 
 const Content = styled.div`
